@@ -54,17 +54,8 @@ func main() {
 				},
 			},
 			{
-				Name:  "commit",
-				Usage: "Record changes to the repository",
-				Flags: []cli.Flag{
-					&cli.StringFlag{
-						Name:     "message",
-						Aliases:  []string{"m"},
-						Value:    "",
-						Usage:    "commit message",
-						Required: true,
-					},
-				},
+				Name:  "add",
+				Usage: "Add file contents to the index",
 				Action: func(cCtx *cli.Context) error {
 					rep, err := git.PlainOpen(".")
 					if err != nil {
@@ -80,7 +71,41 @@ func main() {
 					if err != nil {
 						return err
 					}
-					_, err = wt.Commit(cCtx.String("message"), &git.CommitOptions{})
+
+					return err
+				},
+			},
+			{
+				Name:  "commit",
+				Usage: "Record changes to the repository",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:     "message",
+						Aliases:  []string{"m"},
+						Usage:    "commit message",
+						Required: true,
+					},
+					&cli.BoolFlag{
+						Name:     "all",
+						Aliases:  []string{"A"},
+						Usage:    "adds, modifies, and removes index entries to match the working tree",
+						Required: true,
+					},
+				},
+				Action: func(cCtx *cli.Context) error {
+					rep, err := git.PlainOpen(".")
+					if err != nil {
+						return err
+					}
+
+					wt, err := rep.Worktree()
+					if err != nil {
+						return err
+					}
+
+					_, err = wt.Commit(cCtx.String("message"), &git.CommitOptions{
+						All: cCtx.Bool("all"),
+					})
 					if err != nil {
 						return err
 					}
