@@ -11,8 +11,8 @@ import (
 
 func main() {
 	app := &cli.App{
-		Name:        "git",
-		Description: "Pure go git implementation",
+		Name:  "git",
+		Usage: "Pure go git implementation",
 		Commands: []*cli.Command{
 			{
 				Name:  "clone",
