@@ -86,10 +86,9 @@ func main() {
 						Required: true,
 					},
 					&cli.BoolFlag{
-						Name:     "all",
-						Aliases:  []string{"A"},
-						Usage:    "adds, modifies, and removes index entries to match the working tree",
-						Required: true,
+						Name:    "all",
+						Aliases: []string{"A"},
+						Usage:   "adds, modifies, and removes index entries to match the working tree",
 					},
 				},
 				Action: func(cCtx *cli.Context) error {
@@ -105,6 +104,32 @@ func main() {
 
 					_, err = wt.Commit(cCtx.String("message"), &git.CommitOptions{
 						All: cCtx.Bool("all"),
+					})
+					if err != nil {
+						return err
+					}
+
+					return err
+				},
+			},
+			{
+				Name:  "push",
+				Usage: "Update remote refs along with associated objects",
+				Flags: []cli.Flag{
+					&cli.StringFlag{
+						Name:    "force",
+						Aliases: []string{"f"},
+						Usage:   "force update",
+					},
+				},
+				Action: func(cCtx *cli.Context) error {
+					rep, err := git.PlainOpen(".")
+					if err != nil {
+						return err
+					}
+
+					err = rep.Push(&git.PushOptions{
+						Force: cCtx.Bool("force"),
 					})
 					if err != nil {
 						return err

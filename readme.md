@@ -16,4 +16,5 @@ docker build . -t goferos ; docker run -ti goferos
     - [x] Add
     - [x] Commit
     - [x] Checkout
+    - [x] Push
 - [x] Pure go text editor micro
